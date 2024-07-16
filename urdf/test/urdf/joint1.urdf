@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<robot name="single_leg">
+
+  <material name="blue">
+    <color rgba="0.0 0.5 0.8 0.9"/>
+  </material>
+
+  <material name="black1">
+    <color rgba="0.2 0.2 0.2 1"/>
+  </material>
+
+  <material name="white">
+    <color rgba="0.9 0.9 0.9 0.5"/>
+  </material>
+
+  <link name="world"/>
+
+  <joint name="fixed" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0.5"/>
+    <parent link="world"/>
+    <child link="base"/>
+  </joint>
+
+  <link name="base">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!--Front Left-->
+  <link name="FL_hip">
+    <inertial>
+      <origin xyz="0.058975220413676505 -0.016130924422260128 -0.00322" rpy="0 0 0"/>
+      <mass value = "0.7498"/>
+      <inertia ixx = "0.121212" iyy = "0.00108127" izz = "0.000706572" ixy = "3.86383e-05" iyz = "0" ixz = "0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="../meshes/hip_roll_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="black1"/>
+    </visual>
+<!--    <collision>-->
+<!--      <origin xyz="-0.185613 -0.065216 -0.000494" rpy="0 0 0"/>-->
+<!--      <geometry>-->
+<!--        <mesh filename="../meshes/hip_roll_1.stl" scale="0.001 0.001 0.001"/>-->
+<!--      </geometry>-->
+<!--    </collision>-->
+  </link>
+
+  <!--    joint -->
+  <joint name="FL_HIP_ROLL" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <parent link="base"/>
+    <child link="FL_hip"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+
+</robot>
