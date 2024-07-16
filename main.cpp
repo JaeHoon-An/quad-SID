@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
     auto velocity = robot->getGeneralizedVelocity();
     auto torque = robot->getGeneralizedForce();
     auto initialPosition = position;
-    initialPosition[0] = 3.141592/4;
+    initialPosition[0] = 0.0;
     robot->setGeneralizedCoordinate(initialPosition);
     double refPos[2];
     refPos[0] = initialPosition[0];
@@ -82,9 +82,9 @@ int main(int argc, char* argv[]) {
 
     double localTime = 0.0;
     int iteration = 0;
-    int maxIdx = 100;
-    Eigen::Matrix<double, 100, 10> K_data;
-    Eigen::Matrix<double, 100, 1> Tau_data;
+    int maxIdx = 1000;
+    Eigen::Matrix<double, 1000, 10> K_data;
+    Eigen::Matrix<double, 1000, 1> Tau_data;
 
     int idx = 0;
     for (int i=0; i<2000; i++) {
@@ -94,13 +94,12 @@ int main(int argc, char* argv[]) {
         velocity = robot->getGeneralizedVelocity();
 
         /// Controller
-        double amplitude = 0.25;
+        double amplitude = 0.5;
         double freq = 0.5;
         double phase = 0.0;
-//        refPos[0] = amplitude * sin(2 * 3.141592 * freq * localTime + phase) + initialPosition[0];
-//        refVel[0] = amplitude * 2 * 3.141592 * freq * cos(2 * 3.141592 * freq * localTime + phase);
-        refVel[0] = 0.2;
-        refPos[0] += refVel[0] * world.getTimeStep();
+        refPos[0] = amplitude * sin(2 * 3.141592 * freq * localTime + phase) + initialPosition[0];
+        refVel[0] = amplitude * 2 * 3.141592 * freq * cos(2 * 3.141592 * freq * localTime + phase);
+
         for(int i = 0; i < DOF ; i++)
         {
             torque[i] = 20 * (refPos[i] - position[i]) + 0.1 * (refVel[i] - velocity[i]);
@@ -127,7 +126,7 @@ int main(int argc, char* argv[]) {
         U33 = A3;
         K33 = axisSelectionVec3 * U33;
 
-        estimatedInertialParams = (K33.transpose() * K33 + delta*I10).inverse()*K33.transpose()*torque3;
+//        estimatedInertialParams = (K33.transpose() * K33 + delta*I10).inverse()*K33.transpose()*torque3;
 
 //        std::cout << "w3\n" << w3 <<std::endl<<std::endl;
 //        std::cout << "wd3\n" << wd3 <<std::endl<<std::endl;
@@ -145,8 +144,9 @@ int main(int argc, char* argv[]) {
          {
              estimatedInertialParams = (K_data.transpose() * K_data + delta*I10).inverse()*K_data.transpose()*Tau_data;
              printParams1(estimatedInertialParams);
+            break;
          }
-         else if((iteration%10 == 0) && (idx < maxIdx))
+         else if((iteration%2 == 0) && (idx < maxIdx))
          {
              Eigen::Matrix<double,1,1> tau;
              tau << torque3;
