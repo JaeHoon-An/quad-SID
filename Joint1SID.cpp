@@ -7,7 +7,7 @@
 
 std::string modelFile = std::string(URDF_RSC_DIR) + "test/urdf/joint1.urdf";
 
-void printParams1(Eigen::Matrix<double, 10, 1> param)
+void printParams(Eigen::Matrix<double, 10, 1> param)
 {
     double mass1 = 0.7498;
     for(int i = 0 ; i < 1 ; i++)
@@ -16,22 +16,6 @@ void printParams1(Eigen::Matrix<double, 10, 1> param)
         std::cout<< "m:\t" << param[0 + i * 10] << std::endl;
         std::cout<< "mc:\t" << param[1 + i * 10] << ", " << param[2 + i * 10] << ", " << param[3 + i * 10] << std::endl;
         std::cout<< "c:\t" << param[1 + i * 10] / mass1 << ", " << param[2 + i * 10] / mass1 << ", " << param[3 + i * 10] / mass1 << std::endl;
-        std::cout<< "Ixx:\t" << param[4 + i * 10] << std::endl;
-        std::cout<< "Ixy:\t" << param[5 + i * 10] << std::endl;
-        std::cout<< "Ixz:\t" << param[6 + i * 10] << std::endl;
-        std::cout<< "Iyy:\t" << param[7 + i * 10] << std::endl;
-        std::cout<< "Iyz:\t" << param[8 + i * 10] << std::endl;
-        std::cout<< "Izz:\t" << param[9 + i * 10] << std::endl << std::endl;
-    }
-}
-
-void printParams2(Eigen::Matrix<double, 20, 1> param)
-{
-    for(int i = 0 ; i < 2 ; i++)
-    {
-        std::cout<< "====link"<<i<<"======"<<std::endl;
-        std::cout<< "m:\t" << param[0 + i * 10] << std::endl;
-        std::cout<< "mc:\t" << param[1 + i * 10] << ", " << param[2 + i * 10] << ", " << param[3 + i * 10] << std::endl;
         std::cout<< "Ixx:\t" << param[4 + i * 10] << std::endl;
         std::cout<< "Ixy:\t" << param[5 + i * 10] << std::endl;
         std::cout<< "Ixz:\t" << param[6 + i * 10] << std::endl;
@@ -72,13 +56,11 @@ int main(int argc, char* argv[]) {
     refVel[0] = 0.0;
     refVel[1] = 0.0;
 
-    MatA<double> A3, A2;
-    Vec3<double> pdd3, pdd2;
-    Vec3<double> wd3, wd2;
-    Vec3<double> w3, w2;
-    Vec3<double> w3Prev, w2Prev;
-    Eigen::Matrix<double,3,1> J2, J2Prev, Jd2;
-    Eigen::Matrix<double,6,6> T3;
+    MatA<double> A3;
+    Vec3<double> pdd3;
+    Vec3<double> wd3;
+    Vec3<double> w3;
+    Vec3<double> w3Prev;
 
     double localTime = 0.0;
     int iteration = 0;
@@ -143,7 +125,7 @@ int main(int argc, char* argv[]) {
          if(idx == maxIdx)
          {
              estimatedInertialParams = (K_data.transpose() * K_data + delta*I10).inverse()*K_data.transpose()*Tau_data;
-             printParams1(estimatedInertialParams);
+             printParams(estimatedInertialParams);
             break;
          }
          else if((iteration%2 == 0) && (idx < maxIdx))
@@ -154,49 +136,6 @@ int main(int argc, char* argv[]) {
              Tau_data.block(idx, 0, 1,1) = tau;
              idx++;
          }
-        /// Matrix update for SID2
-//        pdd3.setZero();
-//        w3 << velocity[0], 0.0, 0.0;
-//        wd3 = (w3 - w3Prev) / world.getTimeStep();
-//        SetAMatrix(A3, pdd3, wd3, w3);
-//        w3Prev = w3;
-//
-//        GetJacobian2(J2, position[0]);
-//        Jd2 = (J2 - J2Prev) / world.getTimeStep();
-//        pdd2 = Jd2 * w3[0] + J2 * wd3[0];
-//        w2 << 0.0, velocity[1], 0.0;
-//        wd2 = (w2 - w2Prev) / world.getTimeStep();
-//        SetAMatrix(A2, pdd2, wd2, w2);
-//        w2Prev = w2;
-//        J2Prev = J2;
-//
-//        GetT3(T3, position[0]);
-//        Eigen::Matrix<double, 2, 20> K;
-//        Eigen::Matrix<double, 6, 10> U22, U23, U33;
-//        Eigen::Matrix<double, 1, 10> K22, K23, K33;
-//        U22 = A2;
-//        U23 = T3 * A3;
-//        U33 = A3;
-//        VecAxis<double> axis3, axis2;
-//        axis3 << 0, 0, 0, 1, 0, 0;
-//        axis2 << 0, 0, 0, 0, 1, 0;
-//        K22 = axis2 * U22;
-//        K23 = axis2 * U23;
-//        K33 = axis3 * U33;
-//        K.block(0,0,1,10) = K22;
-//        K.block(0,10,1,10) = K23;
-//        K.block(1,10,1,10) = K33;
-//
-//        Eigen::Matrix<double, 20, 1> estimatedInertialParams;
-//        Eigen::Matrix<double, 20, 20> I;
-//        I.setIdentity();
-//        double delta = 1e-8;
-//        Eigen::Matrix<double, 2, 1> in_torque;
-//        in_torque[0] = torque[0];
-//        in_torque[1] = torque[1];
-//
-//        estimatedInertialParams = (K.transpose() * K + delta*I).inverse()*K.transpose()*in_torque;
-//        printParams2(estimatedInertialParams);
 
         server.integrateWorldThreadSafe();
         iteration++;
