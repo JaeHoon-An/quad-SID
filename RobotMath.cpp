@@ -50,81 +50,7 @@ constexpr double HIP_PITCH2KNEE_PITCH_POSITION_Z = -0.23;
 //                                   0,             0,              0,                 1;
 //            break;
 //        }
-//        case(FR_IDX):
-//        {
-//            Bas2Hip <<             1,             0,              0,     BASE2HIP_ROLL_POSITION_X,
-//                                   0, std::cos(hip), -std::sin(hip),    -BASE2HIP_ROLL_POSITION_Y,
-//                                   0, std::sin(hip),  std::cos(hip),                 0,
-//                                   0,             0,              0,                 1;
-//            Hip2Thi << std::cos(thi),             0,  std::sin(thi),     HIP_ROLL2HIP_PITCH_POSITION_X,
-//                                   0,             1,              0,    -HIP_ROLL2HIP_PITCH_POSITION_Y,
-//                      -std::sin(thi),             0,  std::cos(thi),                 0,
-//                                   0,             0,              0,                 1;
-//            Thi2Cal << std::cos(cal),             0,  std::sin(cal),                 0,
-//                                   0,             1,              0,    -HIP_PITCH2KNEE_PITCH_POSITION_Y,
-//                      -std::sin(cal),             0,  std::cos(cal),     HIP_PITCH2KNEE_PITCH_POSITION_Z,
-//                                   0,             0,              0,                 1;
-//            Cal2Foo << std::cos(kee),             0,  std::sin(kee),                 0,
-//                                   0,             1,              0,                 0,
-//                      -std::sin(kee),             0,  std::cos(kee),     KNEE_PITCH2FOOT_POSITION_Z,
-//                                   0,             0,              0,                 1;
 //
-//            Foo2Gnd <<              1,             0,              0,                 0,
-//                                    0,             1,              0,                 0,
-//                                    0,             0,              1,                 FOOT2GROUND_Z,
-//                                    0,             0,              0,                 1;
-//            break;
-//        }
-//        case(HL_IDX):
-//        {
-//            Bas2Hip <<             1,             0,              0,    -BASE2HIP_ROLL_POSITION_X,
-//                                   0, std::cos(hip), -std::sin(hip),     BASE2HIP_ROLL_POSITION_Y,
-//                                   0, std::sin(hip),  std::cos(hip),                 0,
-//                                   0,             0,              0,                 1;
-//            Hip2Thi << std::cos(thi),             0,  std::sin(thi),    -HIP_ROLL2HIP_PITCH_POSITION_X,
-//                                   0,             1,              0,     HIP_ROLL2HIP_PITCH_POSITION_Y,
-//                      -std::sin(thi),             0,  std::cos(thi),                 0,
-//                                   0,             0,              0,                 1;
-//            Thi2Cal << std::cos(cal),             0,  std::sin(cal),                 0,
-//                                   0,             1,              0,     HIP_PITCH2KNEE_PITCH_POSITION_Y,
-//                      -std::sin(cal),             0,  std::cos(cal),     HIP_PITCH2KNEE_PITCH_POSITION_Z,
-//                                   0,             0,              0,                 1;
-//            Cal2Foo << std::cos(kee),             0,  std::sin(kee),                 0,
-//                                   0,             1,              0,                 0,
-//                      -std::sin(kee),             0,  std::cos(kee),     KNEE_PITCH2FOOT_POSITION_Z,
-//                                   0,             0,              0,                 1;
-//
-//            Foo2Gnd <<              1,             0,              0,                 0,
-//                                    0,             1,              0,                 0,
-//                                    0,             0,              1,                 FOOT2GROUND_Z,
-//                                    0,             0,              0,                 1;
-//
-//            break;
-//        }
-//        case(HR_IDX):
-//        {
-//            Bas2Hip <<             1,             0,              0,    -BASE2HIP_ROLL_POSITION_X,
-//                                   0, std::cos(hip), -std::sin(hip),    -BASE2HIP_ROLL_POSITION_Y,
-//                                   0, std::sin(hip),  std::cos(hip),                 0,
-//                                   0,             0,              0,                 1;
-//            Hip2Thi << std::cos(thi),             0,  std::sin(thi),    -HIP_ROLL2HIP_PITCH_POSITION_X,
-//                                   0,             1,              0,    -HIP_ROLL2HIP_PITCH_POSITION_Y,
-//                      -std::sin(thi),             0,  std::cos(thi),                 0,
-//                                   0,             0,              0,                 1;
-//            Thi2Cal << std::cos(cal),             0,  std::sin(cal),                 0,
-//                                   0,             1,              0,    -HIP_PITCH2KNEE_PITCH_POSITION_Y,
-//                      -std::sin(cal),             0,  std::cos(cal),     HIP_PITCH2KNEE_PITCH_POSITION_Z,
-//                                   0,             0,              0,                 1;
-//            Cal2Foo << std::cos(kee),             0,  std::sin(kee),                 0,
-//                                   0,             1,              0,                 0,
-//                      -std::sin(kee),             0,  std::cos(kee),     KNEE_PITCH2FOOT_POSITION_Z,
-//                                   0,             0,              0,                 1;
-//
-//            Foo2Gnd <<               1,             0,              0,                 0,
-//                                     0,             1,              0,                 0,
-//                                     0,             0,              1,                 FOOT2GROUND_Z,
-//                                     0,             0,              0,                 1;
-//            break;
 //        }
 //        default:
 //        {
@@ -234,7 +160,7 @@ Matdw<double> GetDotW(Vec3<double> w)
     return dw;
 }
 
-void SetAMatrix(MatA<double>& A, const Vec3<double>& pdd, const Vec3<double>& wd, const Vec3<double>& w, double hip)
+void SetA1Matrix(MatA<double>& A, const Vec3<double>& pdd, const Vec3<double>& wd, const Vec3<double>& w, double hip)
 {
     A.setZero();
     Vec3<double> g;
@@ -242,7 +168,7 @@ void SetAMatrix(MatA<double>& A, const Vec3<double>& pdd, const Vec3<double>& wd
     Mat3<double> wdx = GetSkew(wd);
     g << 0, 0, -9.81;
 
-    Mat3<double> Rot;
+    Mat3<double> Rot; //TODO: different with the paper. we have to rotate pdd-g vector to joint frame.
     Rot << 1, 0               , 0,
             0, std::cos(hip), -std::sin(hip),
             0, std::sin(hip),  std::cos(hip);
@@ -251,16 +177,31 @@ void SetAMatrix(MatA<double>& A, const Vec3<double>& pdd, const Vec3<double>& wd
     A.block(3,1,3,3) = GetSkew(Rot.transpose()*(g - pdd));
     A.block(3,4,3,6) = GetDotW(wd) + wx * GetDotW(w);
 
-//    A.setZero();
-//    Vec3<double> g;
-//    Mat3<double> wx = GetSkew(w);
-//    Mat3<double> wdx = GetSkew(wd);
-//    g << 0, 0, -9.81;
-//
-//    A.block(0,0,3,1) = pdd - g;
-//    A.block(0,1,3,3) = wdx + wx * wx;
-//    A.block(3,1,3,3) = GetSkew(g - pdd);
-//    A.block(3,4,3,6) = GetDotW(wd) + wx * GetDotW(w);
+}
+
+void SetA2Matrix(MatA<double>& A, const Vec3<double>& pdd, const Vec3<double>& wd, const Vec3<double>& w, double hip, double thi)
+{
+    A.setZero();
+    Vec3<double> g;
+    Mat3<double> wx = GetSkew(w);
+    Mat3<double> wdx = GetSkew(wd);
+    g << 0, 0, -9.81;
+
+    Mat3<double> Rot3, Rot2, Rot;
+    Rot3 << 1, 0               , 0,
+            0, std::cos(hip), -std::sin(hip),
+            0, std::sin(hip),  std::cos(hip);
+
+    Rot2 << std::cos(thi),  0,  std::sin(thi),
+            0,                 1,              0,
+           -std::sin(thi),  0,  std::cos(thi);
+
+    Rot = Rot3*Rot2; //TODO:
+    A.block(0,0,3,1) = Rot.transpose()*(pdd - g);
+    A.block(0,1,3,3) = wdx + wx * wx;
+    A.block(3,1,3,3) = GetSkew(Rot.transpose()*(g - pdd));
+    A.block(3,4,3,6) = GetDotW(wd) + wx * GetDotW(w);
+
 }
 
 void SetT1Matrix(Mat6<double>& T, const double angle, const Vec3<double>& s)
@@ -283,30 +224,34 @@ void GetJacobian3(Eigen::Matrix<double,3,2>& J3, const double hip, const double 
           HIP_PITCH2KNEE_PITCH_POSITION_Y*std::cos(hip) + HIP_ROLL2HIP_PITCH_POSITION_Y*std::cos(hip) - HIP_PITCH2KNEE_PITCH_POSITION_Z*std::sin(hip)*std::cos(thi), -HIP_PITCH2KNEE_PITCH_POSITION_Z*std::sin(thi)*std::cos(hip);
 }
 
-void GetT2(Eigen::Matrix<double,6,6>& T2, const double thi)
+void GetT2(Eigen::Matrix<double,6,6>& T2, const double cal)
 {
     T2.setZero();
     Mat3<double> Rot;
     Vec3<double> s;
     s << 0.0, HIP_PITCH2KNEE_PITCH_POSITION_Y, HIP_PITCH2KNEE_PITCH_POSITION_Z;
-    Rot << std::cos(thi),    0,  std::sin(thi),
+    Rot << std::cos(cal),    0,  std::sin(cal),
            0,                   1,  0,
-          -std::sin(thi),    0,  std::cos(thi);
+          -std::sin(cal),    0,  std::cos(cal);
     T2.block(0,0,3,3) = Rot;
     T2.block(3,0,3,3) = GetSkew(s) * Rot;
     T2.block(3,3,3,3) = Rot;
 }
 
-void GetT3(Eigen::Matrix<double,6,6>& T3, const double hip)
+void GetT1(Eigen::Matrix<double,6,6>& T1, const double thi)
 {
-    T3.setZero();
+    T1.setZero();
     Mat3<double> Rot;
     Vec3<double> s;
     s << HIP_ROLL2HIP_PITCH_POSITION_X, HIP_ROLL2HIP_PITCH_POSITION_Y, 0.0;
-    Rot << 1, 0               , 0,
-           0, std::cos(hip), -std::sin(hip),
-           0, std::sin(hip),  std::cos(hip);
-    T3.block(0,0,3,3) = Rot;
-    T3.block(3,0,3,3) = GetSkew(s) * Rot;
-    T3.block(3,3,3,3) = Rot;
+    Rot << std::cos(thi),    0,  std::sin(thi),
+            0,                   1,  0,
+            -std::sin(thi),    0,  std::cos(thi);
+    T1.block(0,0,3,3) = Rot.transpose();
+    T1.block(3,0,3,3) = GetSkew(s) * Rot.transpose();
+    T1.block(3,3,3,3) = Rot.transpose();
+
+//    T1.block(0,0,3,3) = Rot;
+//    T1.block(3,0,3,3) = GetSkew(s) * Rot;
+//    T1.block(3,3,3,3) = Rot;
 }

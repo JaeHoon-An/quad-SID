@@ -56,11 +56,11 @@ int main(int argc, char* argv[]) {
     refVel[0] = 0.0;
     refVel[1] = 0.0;
 
-    MatA<double> A3;
-    Vec3<double> pdd3;
-    Vec3<double> wd3;
-    Vec3<double> w3;
-    Vec3<double> w3Prev;
+    MatA<double> A1;
+    Vec3<double> pdd1;
+    Vec3<double> wd1;
+    Vec3<double> w1;
+    Vec3<double> w1Prev;
 
     double localTime = 0.0;
     int iteration = 0;
@@ -89,33 +89,33 @@ int main(int argc, char* argv[]) {
         robot->setGeneralizedForce(torque);
 
         /// Matrix update for SID1
-        pdd3.setZero();
-        w3 << velocity[0], 0.0, 0.0;
-        wd3 = (w3 - w3Prev) / world.getTimeStep();
-        SetAMatrix(A3, pdd3, wd3, w3,position[0]);
-        w3Prev = w3;
+        pdd1.setZero();
+        w1 << velocity[0], 0.0, 0.0;
+        wd1 = (w1 - w1Prev) / world.getTimeStep();
+        SetA1Matrix(A1, pdd1, wd1, w1,position[0]);
+        w1Prev = w1;
         Vec10<double> estimatedInertialParams;
-        VecAxis<double> axisSelectionVec3;
-        axisSelectionVec3 << 0, 0, 0, 1, 0, 0;
-        MatA<double> U33;
-        Vec10T<double> K33;
+        VecAxis<double> axisSelectionVec1;
+        axisSelectionVec1 << 0, 0, 0, 1, 0, 0;
+        MatA<double> U11;
+        Vec10T<double> K11;
 
         Eigen::Matrix<double, 10, 10> I10;
         I10.setIdentity();
         double delta = 1e-8;
-        double torque3;
-        torque3 = torque[0];
-        U33 = A3;
-        K33 = axisSelectionVec3 * U33;
+        double torque1;
+        torque1 = torque[0];
+        U11 = A1;
+        K11 = axisSelectionVec1 * U11;
 
 //        estimatedInertialParams = (K33.transpose() * K33 + delta*I10).inverse()*K33.transpose()*torque3;
 
-//        std::cout << "w3\n" << w3 <<std::endl<<std::endl;
-//        std::cout << "wd3\n" << wd3 <<std::endl<<std::endl;
-//        std::cout << "A3\n" << A3 << std::endl << std::endl;
-//        std::cout << "U33\n" << U33 << std::endl << std::endl;
-//        std::cout << "K33\n" << K33 << std::endl << std::endl;
-//        std::cout << "Tau3\n" << torque3 << std::endl << std::endl;
+        std::cout << "w1\n" << w1 <<std::endl<<std::endl;
+        std::cout << "wd1\n" << wd1 <<std::endl<<std::endl;
+        std::cout << "A1\n" << A1 << std::endl << std::endl;
+        std::cout << "U11\n" << U11 << std::endl << std::endl;
+        std::cout << "K11\n" << K11 << std::endl << std::endl;
+        std::cout << "Tau1\n" << torque1 << std::endl << std::endl;
 //
 //        std::cout << "func1\n" << (K33.transpose() * K33 + delta*I10) << std::endl << std::endl;
 //        std::cout << "func2\n" << (K33.transpose() * K33 + delta*I10).inverse() << std::endl << std::endl;
@@ -131,8 +131,8 @@ int main(int argc, char* argv[]) {
          else if((iteration%2 == 0) && (idx < maxIdx))
          {
              Eigen::Matrix<double,1,1> tau;
-             tau << torque3;
-             K_data.block(idx,0,1,10) = K33;
+             tau << torque1;
+             K_data.block(idx,0,1,10) = K11;
              Tau_data.block(idx, 0, 1,1) = tau;
              idx++;
          }
