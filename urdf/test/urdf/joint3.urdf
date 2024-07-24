@@ -33,7 +33,7 @@
   <!--Front Left-->
   <link name="FL_hip">
     <inertial>
-      <origin xyz="0.058975220413676505 -0.016130924422260128 -9.470708630414767e-05" rpy="0 0 0"/>
+      <origin xyz="0.05 -0.01 -0.003" rpy="0 0 0"/>
       <mass value = "0.7498"/>
       <inertia ixx = "0.000564" iyy = "0.00108127" izz = "0.000706572" ixy = "3.86383e-05" iyz = "0" ixz = "0"/>
     </inertial>
@@ -54,7 +54,7 @@
 
   <link name="FL_thigh">
     <inertial>
-      <origin xyz="-0.005295476492297502 0.055863741051553104 -0.02739556562567192" rpy="0 0 0"/>
+      <origin xyz="-0.005 0.055 -0.03" rpy="0 0 0"/>
       <mass value = "1.539"/>
       <inertia ixx = "0.00728621" iyy = "0.00719179" izz = "0.00186201" ixy = "0.000190838" iyz = "0.00118773" ixz = "-0.000781702"/>
     </inertial>
@@ -75,7 +75,7 @@
 
   <link name="FL_calf">
     <inertial>
-      <origin xyz="0.00031304711228058446 0.018663901688305173 -0.11805864385255102" rpy="0 0 0"/>
+      <origin xyz="0.001 0.02 -0.15" rpy="0 0 0"/>
       <mass value = "0.268"/>
       <inertia ixx = "0.00278652" iyy = "0.00280706" izz = "4.43533e-05" ixy = "-0" iyz = "3.86975e-06" ixz = "-1.99441e-05"/>
     </inertial>
@@ -94,34 +94,12 @@
     </collision>
   </link>
 
-  <link name="FL_wheel">
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.612"/>
-      <inertia ixx = "0.00083348" ixy = "0" ixz = "0" iyx = "0" iyy = "0.00119531" iyz = "0" izx = "0" izy = "0" izz = "0.00083348"/>
-    </inertial>
-    <visual>
-      <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
-      <geometry>
-        <cylinder length="0.04" radius="0.06"/>
-      </geometry>
-      <material name="blue"/>
-    </visual>
-    <collision>
-      <origin xyz="0 0 0" rpy="1.57079632679 0 0"/>
-      <geometry>
-        <cylinder length="0.04" radius="0.06"/>
-      </geometry>
-    </collision>
-  </link>
-
   <!--    joint -->
   <joint name="FL_HIP_ROLL" type="revolute">
     <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
     <parent link="base"/>
     <child link="FL_hip"/>
     <axis xyz="1 0 0"/>
-    <limit effort="30" velocity="13.0" lower="-1.8" upper="1.8" />
   </joint>
 
   <joint name="FL_HIP_PITCH" type="revolute">
@@ -129,7 +107,6 @@
     <parent link="FL_hip"/>
     <child link="FL_thigh"/>
     <axis xyz="0 1 0"/>
-    <limit effort="30" velocity="13.0" lower="-3.14" upper="1.8" />
   </joint>
 
   <joint name="FL_KNEE_PITCH" type="revolute">
@@ -137,12 +114,5 @@
     <parent link="FL_thigh"/>
     <child link="FL_calf"/>
     <axis xyz="0 1 0"/>
-    <limit effort="30" velocity="13.0" lower="-3.14" upper="0.0" />
-  </joint>
-
-  <joint name="FL_wheel_axis" type="fixed">
-    <origin xyz="0 0.06 0.0" rpy="0 0 0"/>
-    <parent link="FL_calf"/>
-    <child link="FL_wheel"/>
   </joint>
 </robot>

@@ -33,9 +33,9 @@
   <!--Front Left-->
   <link name="FL_hip">
     <inertial>
-      <origin xyz="0.058975220413676505 -0.016130924422260128 -9.470708630414767e-05" rpy="0 0 0"/>
+      <origin xyz="0.05 -0.01 -0.003" rpy="0 0 0"/>
       <mass value = "0.7498"/>
-      <inertia ixx = "0.000564" iyy = "0.00108127" izz = "0.000706572" ixy = "3.86383e-05" iyz = "0" ixz = "0"/>
+      <inertia ixx = "0.121212" iyy = "0.00108127" izz = "0.000706572" ixy = "3.86383e-05" iyz = "0" ixz = "0"/>
     </inertial>
     <visual>
       <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
@@ -54,9 +54,9 @@
 
   <link name="FL_thigh">
     <inertial>
-      <origin xyz="-0.005295476492297502 0.055863741051553104 -0.02739556562567192" rpy="0 0 0"/>
+      <origin xyz="0.05 -0.01 -0.003" rpy="0 0 0"/>
       <mass value = "1.539"/>
-      <inertia ixx = "0.00728621" iyy = "0.00719179" izz = "0.00186201" ixy = "0.000190838" iyz = "0.00118773" ixz = "-0.000781702"/>
+      <inertia ixx = "0.011" iyy = "0.024" izz = "0.0036" ixy = "0.012" iyz = "0.025" ixz = "-0.013"/>
     </inertial>
     <visual>
       <origin xyz="-0.0705 0.003 0.0" rpy="0 0 0"/>
